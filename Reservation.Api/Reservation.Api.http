@@ -1,0 +1,5 @@
+@Reservation.Api_HostAddress = http://localhost:5293
+
+Accept: application/json
+
+###
