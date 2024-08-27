@@ -1,0 +1,25 @@
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: messaging_studies
+      MYSQL_DATABASE: messaging_studies
+      MYSQL_USER: messaging_studies
+      MYSQL_PASSWORD: messaging_studies
+    ports:
+      - "3306:3306"
+
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: messaging_studies
+      RABBITMQ_DEFAULT_PASS: messaging_studies
