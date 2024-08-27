@@ -23,7 +23,7 @@ public class ReservedBookEventConsumer : IConsumer<ReservedBookEvent>
       throw new NotFoundError();
     }
 
-    registry.Quantity -= Math.Max(0, registry.Quantity - 1);
+    registry.Quantity = Math.Max(0, registry.Quantity - 1);
 
     _dbContext.Registries.Update(registry);
     
