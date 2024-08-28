@@ -1,4 +1,4 @@
-using Infra.Queue;
+using Api.Middlewares;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Storage.Events;
@@ -39,9 +39,9 @@ public class Startup
     {
       config.AddConsumer<ReservedBookEventConsumer>();
 
-      var host = Environment.GetEnvironmentVariable("RABBITMQ_HOSTNAME");
-      var username = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME");
-      var password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
+      var host = Environment.GetEnvironmentVariable("RABBITMQ_HOSTNAME") ?? String.Empty;
+      var username = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME") ?? String.Empty;
+      var password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD") ?? String.Empty;
 
       config.UsingRabbitMq((context, cfg) =>
       {
@@ -57,8 +57,6 @@ public class Startup
         });
       });
     });
-
-    services.AddMassTransitHostedService();
   }
 
   public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -70,10 +68,9 @@ public class Startup
       app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Armazém"));
     }
 
+    app.UseMiddleware<GlobalErrorHandlingMiddleware>();
     app.UseHttpsRedirection();
-
     app.UseRouting();
-    
     app.UseAuthorization();
 
     app.UseEndpoints(endpoints =>

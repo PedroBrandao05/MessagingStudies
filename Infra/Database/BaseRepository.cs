@@ -5,9 +5,9 @@ namespace Infra.Database;
 
 public abstract class BaseRepository<TEntity, TDbModel> : IRepository<TEntity> where TEntity : Entity where TDbModel : DatabaseModel<TEntity> 
 {
-  protected DbSet<TDbModel> _dbSet { get; set; }
+  protected DbSet<TDbModel> _dbSet { get; }
   
-  protected DbContext _dbContext { get; set; }
+  protected DbContext _dbContext { get; }
 
   public BaseRepository(DbContext dbContext)
   {
