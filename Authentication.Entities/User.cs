@@ -8,4 +8,6 @@ public class User : Entity
   public string Name { get; set; } = String.Empty;
   
   public Email Email { get; set; } = Email.Empty();
+  
+  public string Password { get; set; } = String.Empty;
 }
