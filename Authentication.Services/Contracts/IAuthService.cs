@@ -10,4 +10,6 @@ public interface IAuthService
   public Task<SessionView> SignIn(SignInRequestPayload request);
 
   public Task<SessionView> RefreshToken(RefreshTokenRequestPayload request);
+
+  public Task RequestAdminAccess(RequestAdminAccessRequestPayload request);
 }

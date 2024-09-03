@@ -24,13 +24,23 @@ public class AuthService : IAuthService
   
   private IJwt _jwt { get; }
 
-  public AuthService(IUserRepository userRepository, Encryptor encryptor, IJwt jwt)
+  public AuthService(
+    IUserRepository userRepository, 
+    IAdminRepository adminRepository, 
+    Encryptor encryptor, 
+    IJwt jwt,
+    IRefreshToken refreshToken
+  )
   {
     _userRepository = userRepository;
+
+    _adminRepository = adminRepository;
 
     _encryptor = encryptor;
 
     _jwt = jwt;
+
+    _refreshToken = refreshToken;
   }
   
   public async Task SignUp(SignUpRequestPayload request)
@@ -131,5 +141,21 @@ public class AuthService : IAuthService
     };
 
     return sessionView;
+  }
+
+  public async Task RequestAdminAccess(RequestAdminAccessRequestPayload request)
+  {
+    var tokenPayload = _jwt.Decode(request.Payload.Token);
+
+    if (tokenPayload.CompanyId is null)
+    {
+      throw new ForbiddenError();
+    }
+
+    var admin = await _adminRepository.GetById(tokenPayload.UserId);
+
+    if (admin is not null) return;
+      
+    throw new ForbiddenError();
   }
 }
